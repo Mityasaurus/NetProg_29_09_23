@@ -38,18 +38,13 @@ namespace ServerConApp
 
                 /////////////////////////////////////////////
 
-                socket.Close();
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                port = 8081;
-                endPoint.Port = port;
-
-                socket.Connect(endPoint);
                 string message = "Привiт клiєнте!";
                 data = Encoding.UTF8.GetBytes(message);
-                await socket.SendAsync(data, SocketFlags.None);
+                await client.SendAsync(data, SocketFlags.None);
 
                 Console.ReadKey();
+
+                socket.Close();
             }
             catch(Exception ex)
             {
