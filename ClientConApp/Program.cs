@@ -24,19 +24,6 @@ namespace ClientConApp
 
                 ///////////////////////////////////////////////
 
-                socket.Close();
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                port = 8081;
-
-                endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-
-                socket.Bind(endPoint);
-                socket.Listen();
-
-                Socket client = await socket.AcceptAsync();
-                Console.WriteLine("Server replied");
-
                 data = new byte[256];
                 StringBuilder sb = new StringBuilder();
                 int bytes = 0;
@@ -44,14 +31,15 @@ namespace ClientConApp
                 do
                 {
                     DateTime time = DateTime.Now;
-                    bytes = await client.ReceiveAsync(data, SocketFlags.None);
+                    bytes = await socket.ReceiveAsync(data, SocketFlags.None);
                     sb.Append(Encoding.UTF8.GetString(data, 0, bytes));
-                    IPEndPoint clientEndPoint = client.RemoteEndPoint as IPEndPoint;
-                    Console.WriteLine($"О {time.ToShortTimeString()} вiд {clientEndPoint.Address} отримано рядок: " +
-                        $"{sb}");
-                } while (client.Available > 0);
+                    IPEndPoint serverEndPoint = socket.RemoteEndPoint as IPEndPoint;
+                    Console.WriteLine($"О {time.ToShortTimeString()} вiд {serverEndPoint.Address} отримано рядок: " + $"{sb}");
+                } while (socket.Available > 0);
 
                 Console.ReadKey();
+
+                socket.Close();
             }
             catch(Exception ex)
             {
