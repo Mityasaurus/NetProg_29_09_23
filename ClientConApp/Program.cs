@@ -20,11 +20,12 @@ namespace ClientConApp
                 Console.WriteLine("Get:");
                 Console.WriteLine("1 - Date\n2 - Time");
                 string message = "error";
-                if(Console.ReadLine() == "1")
+                string choice = Console.ReadLine();
+                if(choice == "1")
                 {
                     message = "date";
                 }
-                else if(Console.ReadLine() == "2") 
+                else if(choice == "2") 
                 {
                     message = "time";
                 }
@@ -40,7 +41,7 @@ namespace ClientConApp
                 {
                     bytes = await socket.ReceiveAsync(data, SocketFlags.None);
                     sb.Append(Encoding.UTF8.GetString(data, 0, bytes));
-                    Console.WriteLine($"Answer: {sb}");
+                    Console.WriteLine(sb.ToString());
                 } while (socket.Available > 0);
 
                 Console.ReadKey();
