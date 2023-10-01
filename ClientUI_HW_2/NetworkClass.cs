@@ -1,18 +1,17 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace ClientConApp
+namespace ClientUI_HW_2
 {
-    public class ClientApp
+    public class NetworkClass
     {
         IPEndPoint endPoint;
         Socket socket;
-
-        static void Main(string[] args)
-        {
-
-        }
 
         private async void ConnectAction(string ip, int port)
         {
@@ -38,6 +37,7 @@ namespace ClientConApp
         {
             try
             {
+                
                 byte[] data = new byte[256];
                 StringBuilder sb = new StringBuilder();
                 int bytes = 0;
@@ -71,7 +71,6 @@ namespace ClientConApp
 
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 await socket.SendAsync(data, SocketFlags.None);
-
             }
             catch (Exception ex)
             {
