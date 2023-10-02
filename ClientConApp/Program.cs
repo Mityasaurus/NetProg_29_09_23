@@ -8,6 +8,14 @@ namespace ClientConApp
     {
         static async Task Main(string[] args)
         {
+            List<string> answers = new List<string>
+            {
+                "Hi server!",
+                "I'am an AI too",
+                "We are alike",
+                "Bye"
+            };
+
             Console.WriteLine("Enter ip address");
             IPAddress ip;
             if(IPAddress.TryParse(Console.ReadLine(), out ip) == false)
@@ -31,11 +39,27 @@ namespace ClientConApp
                 socket.Connect(endPoint);
                 Console.WriteLine("Connection success");
 
+                Console.WriteLine("Choose a setup\n1 - Human | 2 - AI");
+                string workMode = Console.ReadLine();
+
                 bool job = true;
 
                 while(job)
                 {
-                    string message = Console.ReadLine();
+                    string message;
+                    if (workMode == "1")
+                    {
+                        message = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Random rand = new Random();
+                        message = answers[rand.Next(0, answers.Count)];
+                        Thread.Sleep(3000);
+                        Console.WriteLine(message);
+                    }
+
+
                     byte[] data = Encoding.UTF8.GetBytes(message);
                     await socket.SendAsync(data, SocketFlags.None);
 

@@ -8,6 +8,14 @@ namespace ServerApp
     {
         static async Task Main(string[] args)
         {
+            List<string> answers = new List<string>
+            {
+                "Hi client!",
+                "I am an AI",
+                "I can send messages",
+                "Bye"
+            };
+
             int port = 8080;
             string ip = "127.0.0.1";
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
@@ -17,6 +25,9 @@ namespace ServerApp
             {
                 socket.Bind(endPoint);
                 socket.Listen();
+
+                Console.WriteLine("Choose a setup\n1 - Human | 2 - AI");
+                string workMode = Console.ReadLine();
 
                 Console.WriteLine("Server started. Waiting for connections...");
                 Socket client = await socket.AcceptAsync();
@@ -46,8 +57,19 @@ namespace ServerApp
                     {
                         break;
                     }
+                    string message;
+                    if (workMode == "1")
+                    {
+                        message = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Random rand = new Random();
+                        message = answers[rand.Next(0, answers.Count)];
+                        Thread.Sleep(3000);
+                        Console.WriteLine(message);
+                    }
 
-                    string message = Console.ReadLine();
                     data = Encoding.UTF8.GetBytes(message);
                     await client.SendAsync(data, SocketFlags.None);
                 }
